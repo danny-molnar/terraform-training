@@ -1,12 +1,31 @@
 resource "aws_s3_bucket" "my_state_bucket" {
   bucket = "talent-academy-834539731159-tfstates"
-  
+
   versioning {
-      enabled = true
+    enabled = true
   }
 
   tags = {
-      Name = "talent-academy-tfstates"
-      Environment = "Test"
+    Name        = "talent-academy-tfstates"
+    Environment = "Test"
   }
+}
+
+resource "aws_dynamodb_table" "terraform_lock_table" {
+  name = "terraform-lock"
+
+  read_capacity  = 1
+  write_capacity = 1
+
+  hash_key = "LockID"
+
+  attribute {
+    name = "LockID"
+    type = "S"
+  }
+
+  tags = {
+    "Name" = "terraform-lock"
+  }
+
 }
